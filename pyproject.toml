@@ -11,11 +11,20 @@ packages = [{include = "tone_teller"}]
 python = "^3.10"
 transformers = "^4.40.1"
 Flask = "^3.0.3"
+torch = {version = "^2.3.0+cu118", source = "pytorch-gpu"}
+torchvision = {version = "^0.18.0+cu118", source = "pytorch-gpu"}
+torchaudio = {version = "^2.3.0+cu118", source = "pytorch-gpu"}
 
 [tool.poetry.group.dev.dependencies]
 pylint = "^3.1.0"
 black = "^24.4.2"
 pytest = "^8.2.0"
+
+
+[[tool.poetry.source]]
+name = "pytorch-gpu"
+url = "https://download.pytorch.org/whl/cu118"
+priority = "explicit"
 
 [build-system]
 requires = ["poetry-core"]
