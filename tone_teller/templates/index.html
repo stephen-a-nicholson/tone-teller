@@ -43,23 +43,38 @@
         <div class="mb-3">
             <textarea name="text" rows="5" class="form-control" id="textInput" placeholder="Enter your text here..."></textarea>
         </div>
+        <div class="mb-3">
+            <label for="modelSelect" class="form-label">Select a sentiment analysis model:</label>
+            <select class="form-select" id="modelSelect">
+                <option value="cardiffnlp/twitter-roberta-base-sentiment">Twitter-roBERTa-base-sentiment</option>
+                <option value="nlptown/bert-base-multilingual-uncased-sentiment">BERT-base-multilingual-uncased-sentiment</option>
+                <option value="bhadresh-savani/distilbert-base-uncased-emotion">DistilBERT-base-uncased-emotion</option>
+            </select>
+        </div>
         <div class="result">
-            <h4>Sentiment Analysis Result:</h4>
+            <h4>Analysis Result:</h4>
             <p id="result"></p>
         </div>
     </div>
     <script>
-        $(document).ready(function(){
-            $('#textInput').keyup(function(){
+        $(document).ready(function() {
+            $('#textInput').keyup(function() {
                 const text = $(this).val();
+                const selectedModel = $('#modelSelect').val();
                 $.ajax({
                     url: '/analyse',
                     type: 'POST',
                     contentType: 'application/json',
-                    data: JSON.stringify({text: text}),
+                    data: JSON.stringify({ text: text, model: selectedModel }),
                     dataType: 'json',
                     success: function(data) {
-                        $('#result').html('Sentiment: ' + data[0].label + ' (Confidence: ' + data[0].score.toFixed(2) + ')');
+                        let resultHtml = '';
+                        if (selectedModel === 'bhadresh-savani/distilbert-base-uncased-emotion') {
+                            resultHtml = 'Emotion: ' + data[0].label + ' (Confidence: ' + data[0].score.toFixed(2) + ')';
+                        } else {
+                            resultHtml = 'Sentiment: ' + data[0].label + ' (Confidence: ' + data[0].score.toFixed(2) + ')';
+                        }
+                        $('#result').html(resultHtml);
                     }
                 });
             });

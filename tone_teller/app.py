@@ -9,8 +9,6 @@ from transformers import pipeline
 
 app = Flask(__name__)
 
-nlp = pipeline("sentiment-analysis")
-
 
 @app.route("/")
 def index():
@@ -36,7 +34,11 @@ def analyse():
     """
     data = request.get_json()
     text = data["text"]
+    selected_model = data["model"]
+
+    nlp = pipeline("sentiment-analysis", model=selected_model)
     result = nlp(text)
+
     return jsonify(result)
 
 
